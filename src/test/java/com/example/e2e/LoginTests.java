@@ -1,26 +1,31 @@
 package com.example.e2e;
-
-import com.example.TestBase;
-import org.junit.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import com.codeborne.selenide.Condition;
+import com.example.pages.LoginPage;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static com.codeborne.selenide.Condition.*;
 
 public class LoginTests extends TestBase {
 
 
     @BeforeClass
-    public void setupClass(){
-        System.out.println("Setting Up Class.");
+    public static void setUpClass(){
+
     }
 
-    @BeforeMethod
-    public void setupTest(){
-        System.out.println("Setting Up Test.");
+    @AfterClass
+    public static void terDownClass(){
+
     }
 
-    @Test(testName = "Test 1")
-    public void test1(){
-        assert true;
+    @Test(testName = "should open login page")
+    public void shouldOpenLoginPage(){
+        loginPage.open();
+        loginPage.emailField.shouldBe(visible);
+        loginPage.passwordField.shouldBe(visible);
+        loginPage.loginHoverButton.shouldBe(visible).shouldBe(disabled);
     }
 
 }

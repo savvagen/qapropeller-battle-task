@@ -5,25 +5,24 @@ plugins {
 }
 
 ext {
-    junitJupiterVersion = '5.5.2'
-    junitPlatformVersion = '1.5.2'
-    allureVersion = '2.7.0'
+    allureGradleVersion = '2.7.0'
+    allureVersion = '2.13.1'
     selenideVersion = '5.5.1'
     testNgVersion = '7.0.0'
 }
 
 allure {
     autoconfigure = true
-    version = "$allureVersion"  // Latest Allure Version
+    version = "$allureGradleVersion"  // Latest Allure Version
     configuration = 'compile'
     aspectjweaver = true
     aspectjVersion = '1.8.10'
-    resultsDir = file("${rootDir}/build/allure-results")
-    reportDir = file("${rootDir}/build/reports/allure-report")
-    useJUnit5 {
-        version = "$allureVersion" // Latest Allure Version
+    resultsDir = file("${rootDir.absolutePath}/build/allure-results")
+    reportDir = file("${rootDir.absolutePath}/build/reports/allure-report")
+    useTestNG {
+        version = '2.0-BETA10'
     }
-    downloadLink = "https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/$allureVersion/allure-${allureVersion}.zip"
+    downloadLink = "https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/$allureGradleVersion/allure-${allureGradleVersion}.zip"
 }
 
 
@@ -34,36 +33,32 @@ version '1.0'
 repositories {
     mavenCentral()
     jcenter()
+    maven { url "https://jitpack.io" }
+
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    // Legacy Junit
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    // Junit 5 Dependencies
-    // implementation(
-    //         "org.junit.jupiter:junit-jupiter:$junitJupiterVersion",
-    //         // Junit Vintage - enables running Junit4 tests
-    //         "org.junit.vintage:junit-vintage-engine:$junitJupiterVersion",
-    //         // Junit Platform dependencies
-    //         "org.junit.platform:junit-platform-engine:$junitPlatformVersion",
-    //         "org.junit.platform:junit-platform-console:$junitPlatformVersion",
-    //         "org.junit.platform:junit-platform-commons:$junitPlatformVersion",
-    //         "org.junit.platform:junit-platform-suite-api:$junitPlatformVersion",
-    //         "org.junit.platform:junit-platform-testkit:$junitPlatformVersion",
-    //         "io.qameta.allure:allure-junit5:2.13.0",
-    // )
-    compile("org.testng:testng:$testNgVersion")
-    compile("com.codeborne:selenide:$selenideVersion")
-    compile("io.qameta.allure:allure-selenide:2.13.0")
-    // Logging
-    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    implementation([
+            "org.testng:testng:$testNgVersion",
+            "com.codeborne:selenide:$selenideVersion",
+            "io.qameta.allure:allure-testng:${allureVersion}",
+            "io.qameta.allure:allure-selenide:${allureVersion}",
+    ])
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    // implementation group: 'com.github.testdotai', name: 'classifier-client-java', version: '1.0.0'
 }
 
 
+task wrapper(type: Wrapper){
+    gradleVersion = '5.4'
+}
+
 
 import io.qameta.allure.gradle.task.AllureReport
-
 task allureAggregatedReport(type: AllureReport) {
     allure.resultsDir
     // Task: ./gradlew allureServe  - to watch the rgenerated report
@@ -71,11 +66,10 @@ task allureAggregatedReport(type: AllureReport) {
 
 
 test {
-    // useJUnitPlatform()
     useTestNG(){
-
+        suites 'src/test/resources/suites/suite.xml'
     }
-}
+}.finalizedBy allureAggregatedReport
 
 
 
@@ -84,4 +78,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+clean.doFirst {
+    delete("${rootDir}/.allure")
+    delete("${rootDir}/build")
+
 }
