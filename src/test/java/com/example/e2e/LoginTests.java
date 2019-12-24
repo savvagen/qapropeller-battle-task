@@ -1,9 +1,6 @@
 package com.example.e2e;
 import com.example.pages.MainPage;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import org.testng.annotations.*;
 import org.testng.reporters.jq.Main;
 
@@ -60,7 +57,7 @@ public class LoginTests extends TestBase {
 
 
     @Test(enabled = true)
-    @Story("Check Login Page")
+    @Story("Non Critical Test")
     public void shouldOpenLoginPage() {
         loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
@@ -70,7 +67,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Check login button")
+    @Story("Non Critical Test")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
         loginPage.loginButton.scrollIntoView("{block: \"center\"}").hover();
@@ -79,7 +76,7 @@ public class LoginTests extends TestBase {
 
 
     @Test
-    @Story("Check login button timeout")
+    @Story("Non Critical Test")
     public void shouldCheckSignInButtonAppears(){
         loginPage.loginWith(admin);
         loginPage.loginButton.hover();
@@ -88,7 +85,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Check login alerts")
+    @Story("Non Critical Test")
     public void shouldCheckLoginAlerts(){
         loginPage.loginWith(admin).submit();
         assertEquals(switchTo().alert().getText(), "Are you sure you want to login?");
@@ -99,7 +96,8 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Full login")
+    @Story("Business Critical Test")
+    @Flaky
     @Description("Make full login action")
     public void shouldLoginToMainPage(){
         MainPage page = loginPage.loginWith(admin).submit().confirm();
