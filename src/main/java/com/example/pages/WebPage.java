@@ -14,9 +14,9 @@ public abstract class WebPage {
 
     public void shouldBeOpened(){
         assertEquals(getWebDriver().getTitle(), this.title,
-                "Page title do not match. \nExpected title: " + this.title);
+                "Page title do not match. \n");
         assertEquals(getWebDriver().getCurrentUrl(), Configuration.baseUrl + this.url,
-                "Page url is not correct.\nExpected URL: " + Configuration.baseUrl + this.url);
+                "Page url is not correct.\n");
     }
 
 //    public <T extends WebPage> T open(Class<T> tClass) {
