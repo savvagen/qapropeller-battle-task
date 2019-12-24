@@ -24,21 +24,23 @@ public class LoginPage extends WebPage {
         this.title = "Welcome to Propeller Automated Testing Championship";
     }
 
+
+    @Step("Open Login page")
     public LoginPage open(){
         return Selenide.open(this.url, this.getClass());
     }
 
 
-    @Step
+    @Step("Login With credentials: user = ${user.username}; pass = ${user.password}")
     public LoginPage loginWith(User user){
         emailField.parent().click();
-        emailField.val(user.getUsername());
+        emailField.setValue(user.getUsername());
         passwordField.find(byXpath("./parent::div")).click();
-        passwordField.val(user.getPassword());
+        passwordField.setValue(user.getPassword());
         return this;
     }
 
-    @Step
+    @Step("Submit login")
     public LoginPage submit(){
         loginButton.hover();
         loginButton.should(disappear);
@@ -46,7 +48,7 @@ public class LoginPage extends WebPage {
         return this;
     }
 
-    @Step
+    @Step("Confirm login alerts")
     public MainPage confirm(){
         switchTo().alert().accept();
         preloader.shouldBe(visible);

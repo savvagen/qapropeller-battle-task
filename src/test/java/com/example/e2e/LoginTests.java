@@ -1,5 +1,9 @@
 package com.example.e2e;
 import com.example.pages.MainPage;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.annotations.*;
 import org.testng.reporters.jq.Main;
 
@@ -10,6 +14,8 @@ import static org.testng.Assert.*;
 
 import static com.codeborne.selenide.Condition.*;
 
+@Epic("Smoke")
+@Feature("Login Page")
 public class LoginTests extends TestBase {
 
 
@@ -54,6 +60,7 @@ public class LoginTests extends TestBase {
 
 
     @Test(enabled = true)
+    @Story("Check Login Page")
     public void shouldOpenLoginPage() {
         loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
@@ -63,6 +70,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
+    @Story("Check login button")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
         loginPage.loginButton.scrollIntoView("{block: \"center\"}").hover();
@@ -71,6 +79,7 @@ public class LoginTests extends TestBase {
 
 
     @Test
+    @Story("Check login button timeout")
     public void shouldCheckSignInButtonAppears(){
         loginPage.loginWith(admin);
         loginPage.loginButton.hover();
@@ -79,6 +88,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
+    @Story("Check login alerts")
     public void shouldCheckLoginAlerts(){
         loginPage.loginWith(admin).submit();
         assertEquals(switchTo().alert().getText(), "Are you sure you want to login?");
@@ -89,6 +99,8 @@ public class LoginTests extends TestBase {
     }
 
     @Test
+    @Story("Full login")
+    @Description("Make full login action")
     public void shouldLoginToMainPage(){
         MainPage page = loginPage.loginWith(admin).submit().confirm();
         page.userButton.shouldBe(visible);
