@@ -1,14 +1,13 @@
 package com.example.pages;
 
 import com.codeborne.selenide.*;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.testng.Assert;
-import sun.applet.Main;
+import com.example.models.User;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 
 public class LoginPage extends WebPage {
@@ -21,39 +20,38 @@ public class LoginPage extends WebPage {
                         preloader = $("#loader");
 
     public LoginPage(){
-        this.url = "/";
-        this.title = "Welcom to Propeller Automated Testing Championship";
+        this.url = "";
+        this.title = "Welcome to Propeller Automated Testing Championship";
     }
 
     public LoginPage open(){
         return Selenide.open(this.url, this.getClass());
     }
 
-    public LoginPage shouldBeOpened(){
-        assertEquals(WebDriverRunner.getWebDriver().getTitle(), this.title);
+
+    @Step
+    public LoginPage loginWith(User user){
+        emailField.parent().click();
+        emailField.val(user.getUsername());
+        passwordField.find(byXpath("./parent::div")).click();
+        passwordField.val(user.getPassword());
         return this;
     }
 
-    public LoginPage submitLogin(String username,String password){
-        emailField.parent().click();
-        emailField.val("test");
-        passwordField.find(byXpath("./parent::div")).click();
-        passwordField.setValue("test");
+    @Step
+    public LoginPage submit(){
         loginButton.hover();
         loginButton.should(disappear);
         signInButton.shouldBe(visible).click();
         return this;
     }
 
-    public MainPage confirmLogin(){
+    @Step
+    public MainPage confirm(){
         switchTo().alert().accept();
         preloader.shouldBe(visible);
         switchTo().alert().accept();
         return new MainPage();
-    }
-
-    public MainPage login(String username, String pass){
-        return submitLogin(username, pass).confirmLogin();
     }
 
 }
