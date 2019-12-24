@@ -57,7 +57,7 @@ public class LoginTests extends TestBase {
 
 
     @Test(enabled = true)
-    @Story("Non Critical Test")
+    @Story("Non Critical Tests")
     public void shouldOpenLoginPage() {
         loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
@@ -67,7 +67,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Non Critical Test")
+    @Story("Non Critical Tests")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
         loginPage.loginButton.scrollIntoView("{block: \"center\"}").hover();
@@ -76,7 +76,7 @@ public class LoginTests extends TestBase {
 
 
     @Test
-    @Story("Non Critical Test")
+    @Story("Non Critical Tests")
     public void shouldCheckSignInButtonAppears(){
         loginPage.loginWith(admin);
         loginPage.loginButton.hover();
@@ -85,7 +85,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Non Critical Test")
+    @Story("Non Critical Tests")
     public void shouldCheckLoginAlerts(){
         loginPage.loginWith(admin).submit();
         assertEquals(switchTo().alert().getText(), "Are you sure you want to login?");
@@ -96,7 +96,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    @Story("Business Critical Test")
+    @Story("Business Critical Tests")
     @Flaky
     @Description("Make full login action")
     public void shouldLoginToMainPage(){
