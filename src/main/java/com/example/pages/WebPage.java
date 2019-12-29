@@ -13,22 +13,19 @@ public abstract class WebPage {
     public String title;
 
     public void shouldBeOpened(){
-        assertEquals(getWebDriver().getTitle(), this.title,
-                "Page title do not match. \n");
-        assertEquals(getWebDriver().getCurrentUrl(), Configuration.baseUrl + this.url,
-                "Page url is not correct.\n");
+        assertEquals(getWebDriver().getTitle(), this.title, "Page title do not match. \n");
+        assertEquals(getWebDriver().getCurrentUrl(), Configuration.baseUrl + this.url, "Page url is not correct.\n");
     }
 
-//    public <T extends WebPage> T open(Class<T> tClass) {
-//        T page = null;
-//        try {
-//            tClass.newInstance();
-//            Selenide.open(page.url);
-//            return page;
-//        } catch(IllegalAccessError | InstantiationError | InstantiationException | IllegalAccessException error){
-//            error.printStackTrace();
-//        }
-//        return page;
-//    }
+    public static  <T extends WebPage> T open(Class<T> tClass) {
+        T page = null;
+        try {
+            page = Selenide.open(tClass.newInstance().url, tClass);
+        } catch (IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+        return page;
+    }
+
 
 }

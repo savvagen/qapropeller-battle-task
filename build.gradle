@@ -46,9 +46,9 @@ dependencies {
             "io.qameta.allure:allure-testng:${allureVersion}",
             "io.qameta.allure:allure-selenide:${allureVersion}",
     ])
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.8.0-beta4'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.8.0-beta4'
     // implementation group: 'com.github.testdotai', name: 'classifier-client-java', version: '1.0.0'
 }
 
@@ -81,7 +81,8 @@ compileTestKotlin {
 }
 
 clean.doFirst {
+    delete("${rootDir}/allure-results")
     delete("${rootDir}/.allure")
     delete("${rootDir}/build")
-
+    delete("${rootDir}/out")
 }

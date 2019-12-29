@@ -1,19 +1,18 @@
 package com.example.e2e;
-import com.example.pages.MainPage;
+
+import com.example.BaseTest;
+import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
-import org.testng.reporters.jq.Main;
 
-import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
-
 import static com.codeborne.selenide.Condition.*;
 
 @Epic("Smoke")
 @Feature("Login Page")
-public class LoginTests extends TestBase {
+public class LoginTests extends BaseTest {
 
 
     @BeforeClass
@@ -26,6 +25,7 @@ public class LoginTests extends TestBase {
 
     @BeforeMethod
     public void setUp(){
+        clearBrowserCache();
         loginPage.open();
     }
 
@@ -59,14 +59,14 @@ public class LoginTests extends TestBase {
     @Test(enabled = true)
     @Story("Non Critical Tests")
     public void shouldOpenLoginPage() {
-        loginPage.shouldBeOpened();
+        // loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
         loginPage.passwordField.shouldBe(visible);
         loginPage.header.shouldBe(visible).shouldHave(text("Welcome to Propeller Championship!"));
         loginPage.loginButton.shouldBe(exist).shouldBe(disabled).shouldHave(text("Hover me faster!\n"));
     }
 
-    @Test
+    /*@Test
     @Story("Non Critical Tests")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
@@ -90,7 +90,7 @@ public class LoginTests extends TestBase {
         loginPage.loginWith(admin).submit();
         assertEquals(switchTo().alert().getText(), "Are you sure you want to login?");
         switchTo().alert().accept();
-        loginPage.preloader.shouldBe(visible);
+        loginPage.loader.shouldBe(visible);
         assertEquals(switchTo().alert().getText(), "Really sure?");
         switchTo().alert().accept();
     }
@@ -104,5 +104,5 @@ public class LoginTests extends TestBase {
         page.userButton.shouldBe(visible);
         page.header.shouldBe(visible).shouldHave(text("Articles to read"));
         assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
-    }
+    }*/
 }

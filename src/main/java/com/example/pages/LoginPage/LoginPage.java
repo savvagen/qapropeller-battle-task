@@ -1,14 +1,14 @@
-package com.example.pages;
+package com.example.pages.LoginPage;
 
 import com.codeborne.selenide.*;
 import com.example.models.User;
+import com.example.pages.MainPage.MainPage;
+import com.example.pages.WebPage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.WebDriverRunner.*;
-import static org.testng.Assert.*;
 
 public class LoginPage extends WebPage {
 
@@ -17,10 +17,10 @@ public class LoginPage extends WebPage {
                         passwordField = $("#passwordInput"),
                         loginButton = $("div[class*='card-footer']").$$("button").filter(visible).last(),
                         signInButton = $("div[class*='card-footer'] img"),
-                        preloader = $("#loader");
+                        loader = $("#loader");
 
     public LoginPage(){
-        this.url = "";
+        this.url = "/index.html";
         this.title = "Welcome to Propeller Automated Testing Championship";
     }
 
@@ -51,7 +51,7 @@ public class LoginPage extends WebPage {
     @Step("Confirm login alerts")
     public MainPage confirm(){
         switchTo().alert().accept();
-        preloader.shouldBe(visible);
+        loader.shouldBe(visible);
         switchTo().alert().accept();
         return new MainPage();
     }
