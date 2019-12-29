@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="FunctionalTests"
+       thread-count="2"
+       data-provider-thread-count="2"
+       parallel="classes">
+    <test name="FunctionalTest">
+        <!--<classes>
+            <class name="com.example.e2e.LoginTests"/>
+            <class name="com.example.e2e.MainPageTests"/>
+        </classes>-->
+        <packages>
+            <package name="com.example.e2e"/>
+        </packages>
+    </test>
+</suite>

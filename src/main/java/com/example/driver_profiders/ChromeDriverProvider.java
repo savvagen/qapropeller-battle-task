@@ -3,7 +3,6 @@ package com.example.driver_profiders;
 import com.codeborne.selenide.WebDriverProvider;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -32,11 +31,10 @@ public class ChromeDriverProvider implements WebDriverProvider {
         RemoteWebDriver driver = null;
         try {
             driver = new RemoteWebDriver(URI.create("http://127.0.0.1:4444/wd/hub").toURL(), dc);
+            log.info("Running browser with session: " + driver.getSessionId().toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        assert driver != null;
-        log.info("Running browser with session: " + driver.getSessionId().toString());
         return driver;
     }
 

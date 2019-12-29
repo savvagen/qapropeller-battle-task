@@ -33,7 +33,7 @@ public class MainPageTests extends BaseTest {
         mainPage.userButton.shouldBe(visible);
         mainPage.categories.forEach(category -> category.shouldBe(visible));
         mainPage.categories.shouldHave(CollectionCondition.size(3));
-        //mainPage.logoutButton.shouldBe(visible);
+        mainPage.logoutButton.shouldBe(visible);
     }
 
 

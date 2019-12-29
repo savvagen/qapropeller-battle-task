@@ -1,16 +1,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="FunctionalTests" thread-count="1" data-provider-thread-count="1" parallel="false">
     <test name="RegressionTest">
-        <!--<classes>-->
-            <!--<class name="com.example.functional.LoginTests"/-->
-        <!--</classes>-->
-        <packages>
+        <classes>
+            <class name="com.example.e2e.LoginTests"/>
+        </classes>
+<!--    <packages>
             <package name="com.example.e2e"/>
-        </packages>
+        </packages>-->
     </test>
-
-
-
-
-
 </suite>

@@ -4,7 +4,6 @@ import com.example.BaseTest;
 import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
-
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
@@ -12,11 +11,12 @@ import static com.codeborne.selenide.Condition.*;
 
 @Epic("Smoke")
 @Feature("Login Page")
+@Link(name = "video", type = "selenoid")
 public class LoginTests extends BaseTest {
 
 
     @BeforeClass
-    public static void setUpClass(){
+    public void setUpClass(){
     }
 
     @AfterClass
@@ -59,14 +59,14 @@ public class LoginTests extends BaseTest {
     @Test(enabled = true)
     @Story("Non Critical Tests")
     public void shouldOpenLoginPage() {
-        // loginPage.shouldBeOpened();
+        loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
         loginPage.passwordField.shouldBe(visible);
         loginPage.header.shouldBe(visible).shouldHave(text("Welcome to Propeller Championship!"));
         loginPage.loginButton.shouldBe(exist).shouldBe(disabled).shouldHave(text("Hover me faster!\n"));
     }
 
-    /*@Test
+    @Test
     @Story("Non Critical Tests")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
@@ -104,5 +104,5 @@ public class LoginTests extends BaseTest {
         page.userButton.shouldBe(visible);
         page.header.shouldBe(visible).shouldHave(text("Articles to read"));
         assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
-    }*/
+    }
 }
