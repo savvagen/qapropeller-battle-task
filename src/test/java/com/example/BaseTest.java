@@ -6,6 +6,7 @@ import com.example.driver_profiders.ChromeDriverProvider;
 import com.example.models.User;
 import com.example.pages.LoginPage.LoginPage;
 import com.example.pages.MainPage.MainPage;
+import com.example.pages.ProfilePage.ProfilePage;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.qameta.allure.selenide.LogType;
@@ -14,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import sun.java2d.cmm.Profile;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -27,6 +30,8 @@ public class BaseTest {
 
     public LoginPage loginPage;
     public MainPage mainPage;
+    public ProfilePage profilePage;
+
     public User admin;
     public Cookie secretCookie;
     private static final Logger log = LoggerFactory.getLogger("appLogger");
@@ -53,6 +58,7 @@ public class BaseTest {
                 .build();
         loginPage = new LoginPage();
         mainPage = new MainPage();
+        profilePage = new ProfilePage();
     }
 
 

@@ -3,11 +3,13 @@ package com.example.e2e;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.example.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
+import static org.testng.Assert.*;
 
 
 
@@ -63,6 +65,19 @@ public class MainPageTests extends BaseTest {
         mainPage.cardTitle.shouldBe(visible).shouldHave(text("Darth Vader"));
         mainPage.categories.filterBy(visible).shouldHaveSize(3);
         mainPage.articles.filterBy(visible).shouldHaveSize(14);
+    }
+
+    @Test
+    public void checkUserButton(){
+        mainPage.userButton.click();
+        profilePage.header.shouldBe(visible).shouldHave(text("User profile settings"));
+        assertTrue(getWebDriver().getCurrentUrl().contains(profilePage.url));
+    }
+
+    @Test
+    public void moveArticleToSaved(){
+        mainPage.clickCategory(0).clickArticle(0);
+
     }
 
 }
