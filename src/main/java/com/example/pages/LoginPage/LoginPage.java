@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Selectors.*;
 public class LoginPage extends WebPage {
 
     public SelenideElement header = $("div[class*='card-header'] h4"),
+                        loginForm = $(".card-body"),
                         emailField = $("#loginInput"),
                         passwordField = $("#passwordInput"),
                         loginButton = $("div[class*='card-footer']").$$("button").filter(visible).last(),

@@ -1,6 +1,7 @@
 package com.example.e2e;
 
 import com.example.BaseTest;
+import com.example.models.User;
 import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
@@ -100,9 +101,21 @@ public class LoginTests extends BaseTest {
     @Flaky
     @Description("Make full login action")
     public void shouldLoginToMainPage(){
-        MainPage page = loginPage.loginWith(admin).submit().confirm();
+        var page = loginPage.loginWith(admin).submit().confirm();
         page.userButton.shouldBe(visible);
         page.header.shouldBe(visible).shouldHave(text("Articles to read"));
         assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
+    }
+
+    @Test
+    @Story("Non Critical Tests")
+    @Description("Check error message appears in case of invalid login")
+    public void shouldNotLoginWithInvalidPassword(){
+        var invalidUser = new User("test", "invalid");
+        loginPage.open().loginWith(invalidUser).submit().confirm();
+        loginPage.emailField.shouldBe(visible);
+        loginPage.passwordField.shouldBe(visible);
+        loginPage.loginForm.$("h6").shouldBe(visible).shouldHave(text("Invalid username or password."));
+
     }
 }

@@ -1,16 +1,17 @@
 package com.example.e2e;
 
 
-import com.codeborne.selenide.CollectionCondition;
 import com.example.BaseTest;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
-
 
 
 public class MainPageTests extends BaseTest {
@@ -33,51 +34,82 @@ public class MainPageTests extends BaseTest {
     public void shouldCheckMainPage(){
         mainPage.open();
         mainPage.userButton.shouldBe(visible);
-        mainPage.categories.forEach(category -> category.shouldBe(visible));
-        mainPage.categories.shouldHave(CollectionCondition.size(3));
-        mainPage.logoutButton.shouldBe(visible);
-    }
-
-
-    @Test
-    public void shouldOpenFirstArticle(){
-        mainPage.clickCategory("Advertisers")
-                .clickArticle(0);
-        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
-        mainPage.categories.filterBy(visible).shouldHaveSize(3);
-        mainPage.articles.filterBy(visible).shouldHaveSize(2);
+        mainPage.readArticles.categories.forEach(category -> category.shouldBe(visible));
+        mainPage.readArticles.categories.shouldHave(size(3));
     }
 
     @Test
-    public void shouldOpenFirstArticleByName(){
-        mainPage.clickCategory("Advertisers")
-                .clickArticle("Test Advertiser");
-        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
-        mainPage.categories.filterBy(visible).shouldHaveSize(3);
-        mainPage.articles.filterBy(visible).shouldHaveSize(2);
-    }
-
-
-    @Test
-    public void openAllCategoriesAndArticles(){
-        mainPage.clickCategory(0).clickCategory(1).clickCategory(2);
-        mainPage.clickArticle("Darth Vader");
-        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Darth Vader"));
-        mainPage.categories.filterBy(visible).shouldHaveSize(3);
-        mainPage.articles.filterBy(visible).shouldHaveSize(14);
-    }
-
-    @Test
-    public void checkUserButton(){
+    public void shouldOpenUserProfile(){
         mainPage.userButton.click();
         profilePage.header.shouldBe(visible).shouldHave(text("User profile settings"));
         assertTrue(getWebDriver().getCurrentUrl().contains(profilePage.url));
     }
 
     @Test
-    public void moveArticleToSaved(){
-        mainPage.clickCategory(0).clickArticle(0);
+    public void shouldOpenFirstArticle(){
+        mainPage.readArticles.clickCategory("Advertisers").clickArticle(0);
+        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
+        mainPage.readArticles.categories.filterBy(visible).shouldHaveSize(3);
+        mainPage.readArticles.articles.filterBy(visible).shouldHaveSize(2);
+    }
+
+    @Test
+    public void shouldOpenFirstArticleByName(){
+        mainPage.readArticles.clickCategory("Advertisers").clickArticle("Test Advertiser");
+        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
+        mainPage.readArticles.categories.filterBy(visible).shouldHaveSize(3);
+        mainPage.readArticles.articles.filterBy(visible).shouldHaveSize(2);
+    }
+
+
+    @Test
+    public void shouldOpenAllCategoriesAndArticles(){
+        mainPage.readArticles.clickCategory(0).clickCategory(1).clickCategory(2);
+        mainPage.readArticles.clickArticle("Darth Vader");
+        mainPage.cardTitle.shouldBe(visible).shouldHave(text("Darth Vader"));
+        mainPage.readArticles.categories.filterBy(visible).shouldHaveSize(3);
+        mainPage.readArticles.articles.filterBy(visible).shouldHaveSize(14);
+        assertEquals(getWebDriver().manage().getCookieNamed("notSavedOpened").getValue(),
+                "Advertisers,Publishers,Top level clients");
+    }
+
+    @Test
+    public void shouldAddArticleToSaved(){
+        mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
+        mainPage.saveArticle();
+        mainPage.savedArticlesContainer.shouldBe(visible);
+        mainPage.savedArticles.categories.shouldHave(sizeGreaterThanOrEqual(1));
+        mainPage.savedArticles.articles.shouldHave(sizeGreaterThanOrEqual(1));
+        mainPage.readArticles.articles.filterBy(visible).shouldHaveSize(9).filterBy(text("Darth Vader")).shouldHaveSize(0);
+        assertEquals(getWebDriver().manage().getCookieNamed("notSavedOpened").getValue(), "Top level clients");
+        assertEquals(getWebDriver().manage().getCookieNamed("saved").getValue(), "Darth Vader");
+    }
+
+    @Test
+    public void shouldRemoveArticleFromSavedList(){
+        String articleName = "Darth Vader";
+        mainPage.readArticles.clickCategory("Top level clients").clickArticle(articleName);
+        mainPage.saveArticle();
+        mainPage.savedArticlesContainer.shouldBe(visible);
+        mainPage.savedArticles.clickCategory(0);
+        mainPage.savedArticles.articles.filterBy(text(articleName)).shouldHaveSize(1);
+        mainPage.readArticles.articles.filterBy(visible).filterBy(text(articleName)).shouldHaveSize(0);
+        mainPage.removeArticle();
+        mainPage.savedArticlesContainer.should(disappear);
+        mainPage.savedArticlesContainer.should(not(be(visible)));
+        mainPage.readArticles.articles.filterBy(visible).filterBy(text(articleName)).shouldHaveSize(1);
+        assertNull(getWebDriver().manage().getCookieNamed("saved"));
 
     }
+
+    @Test
+    public void shouldDownloadArticleData() throws IOException, InterruptedException {
+        mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
+        var downloadedFile = mainPage.downloadArticle();
+        var actualText = new String(Files.readAllBytes(Paths.get(downloadedFile.getAbsolutePath())));
+        var expectedText = new String(Files.readAllBytes(Paths.get(descriptionFilePath)));
+        assertEquals(expectedText, actualText);
+    }
+
 
 }

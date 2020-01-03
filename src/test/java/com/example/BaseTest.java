@@ -1,6 +1,7 @@
 package com.example;
 
 
+import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.example.driver_profiders.ChromeDriverProvider;
 import com.example.models.User;
@@ -15,11 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
-import sun.java2d.cmm.Profile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.http.HttpClient;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -28,13 +28,16 @@ import static com.codeborne.selenide.Configuration.*;
 
 public class BaseTest {
 
+
+    private static final Logger log = LoggerFactory.getLogger("appLogger");
+    public final String descriptionFilePath = "src/test/resources/data/darth_vader.txt";
+    public User admin;
+    public Cookie secretCookie;
+
     public LoginPage loginPage;
     public MainPage mainPage;
     public ProfilePage profilePage;
 
-    public User admin;
-    public Cookie secretCookie;
-    private static final Logger log = LoggerFactory.getLogger("appLogger");
 
     public BaseTest(){
         InetAddress inetAddress = null;
@@ -46,14 +49,17 @@ public class BaseTest {
         assert inetAddress != null;
         log.info("Running Tests on host: " + inetAddress);
 
-        baseUrl = "http://" + inetAddress.getHostAddress() + ":8080";
+        baseUrl = "http://localhost:8080"; // String.format("http://%s:8080", inetAddress.getHostAddress());
         browserSize = "1280x1024"; // 12024x768
         timeout = 11000;
+        startMaximized = true;
+        // fileDownload = FileDownloadMode.HTTPGET;
         //browser = ChromeDriverProvider.class.getName();
         browser = "chrome";
         admin = new User("test", "test");
         secretCookie = new Cookie.Builder("secret", "IAmSuperSeleniumMaster")
-                .domain(inetAddress.getHostAddress())
+                //.domain(inetAddress.getHostAddress())
+                .domain("localhost")
                 .path("/")
                 .build();
         loginPage = new LoginPage();

@@ -17,13 +17,19 @@ public abstract class WebPage {
         assertEquals(getWebDriver().getCurrentUrl(), Configuration.baseUrl + this.url, "Page url is not correct.\n");
     }
 
-    public static  <T extends WebPage> T open(Class<T> tClass) {
+    public  <T extends WebPage> T open(Class<T> tClass) {
         T page = null;
         try {
             page = Selenide.open(tClass.newInstance().url, tClass);
         } catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
+        return page;
+    }
+
+    public <T extends WebPage> T open(T page) {
+        Class<T> tClass = (Class<T>) page.getClass();
+        page = Selenide.open(page.url, tClass);
         return page;
     }
 
