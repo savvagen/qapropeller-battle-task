@@ -2,7 +2,6 @@ package com.example.pages.MainPage;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
-import com.example.models.Articles;
 import com.example.pages.WebPage;
 import com.google.gson.Gson;
 
@@ -32,8 +31,8 @@ public class MainPage extends WebPage {
                             readArticlesContainer = $(byText("Articles to read")).parent(),
                             savedArticlesContainer = $(byText("Saved articles")).parent();
 
-    public ArticlesList readArticles = new ArticlesList(readArticlesContainer);
-    public ArticlesList savedArticles = new ArticlesList(savedArticlesContainer);
+    public Articles readArticles = new Articles(readArticlesContainer);
+    public Articles savedArticles = new Articles(savedArticlesContainer);
 
     public MainPage() {
         this.title = "";
@@ -66,7 +65,7 @@ public class MainPage extends WebPage {
     public File downloadArticle() throws IOException, InterruptedException {
         var request = HttpRequest.newBuilder().GET().uri(URI.create(baseUrl + "/articles.json")).build();
         var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        var articles = new Gson().fromJson(response.body(), Articles.class);
+        var articles = new Gson().fromJson(response.body(), com.example.models.Articles.class);
         var articleDataFileTextLink = articles.articles.get(2).subArticles.get(9).articleDataFileTextLink;
         executeJavaScript(
                 String.format("$(\"button:contains('Download info')\")[0].setAttribute('href', \"%s/%s\");",

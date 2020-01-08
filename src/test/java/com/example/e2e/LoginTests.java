@@ -1,5 +1,6 @@
 package com.example.e2e;
 
+import com.codeborne.selenide.testng.GlobalTextReport;
 import com.example.BaseTest;
 import com.example.models.User;
 import com.example.pages.MainPage.MainPage;
@@ -13,6 +14,7 @@ import static com.codeborne.selenide.Condition.*;
 @Epic("Smoke")
 @Feature("Login Page")
 @Link(name = "video", type = "selenoid")
+@Listeners({GlobalTextReport.class})
 public class LoginTests extends BaseTest {
 
 
