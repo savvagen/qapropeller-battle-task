@@ -51,7 +51,7 @@ public class BaseTest {
         log.info("Running Tests on host: " + inetAddress);
 
         baseUrl = "http://localhost:8080"; // String.format("http://%s:8080", inetAddress.getHostAddress());
-        // Configuration.remote= "";
+        // Configuration.remote = "";
 
         browserSize = "1280x1024"; // 12024x768
         timeout = 11000;

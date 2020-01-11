@@ -28,6 +28,8 @@ public class MainPage extends WebPage {
                             downloadButton = $(byText("Download info")),
                             cardSaveButton = $(byText("Move to saved")),
                             cardRemoveButton = $(byText("Removed from saved")),
+                            cardSlider = $("div[class*='ui-slider'] > span"),
+                            heroImage = $("#heroImage"),
                             readArticlesContainer = $(byText("Articles to read")).parent(),
                             savedArticlesContainer = $(byText("Saved articles")).parent();
 

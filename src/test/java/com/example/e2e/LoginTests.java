@@ -111,13 +111,23 @@ public class LoginTests extends BaseTest {
 
     @Test
     @Story("Non Critical Tests")
-    @Description("Check error message appears in case of invalid login")
+    @Description("Check user navigated to empty page in case of invalid login")
     public void shouldNotLoginWithInvalidPassword(){
         var invalidUser = new User("test", "invalid");
         loginPage.open().loginWith(invalidUser).submit().confirm();
-        loginPage.emailField.shouldBe(visible);
-        loginPage.passwordField.shouldBe(visible);
-        loginPage.loginForm.$("h6").shouldBe(visible).shouldHave(text("Invalid username or password."));
+        loginPage.loginForm.shouldNot(be(visible));
+        assertEquals(getWebDriver().getTitle(), loginPage.title);
+        assertTrue(loginPage.registerContainer.getAttribute("style").contains("display: none;"));
+    }
 
+    @Test
+    @Story("Non Critical Tests")
+    @Description("Check user navigated to empty page in case of invalid login")
+    public void shouldNotLoginWithInvalidLogin() {
+        var invalidUser = new User("invalid", "test");
+        loginPage.open().loginWith(invalidUser).submit().confirm();
+        loginPage.loginForm.shouldNot(be(visible));
+        assertEquals(getWebDriver().getTitle(), loginPage.title);
+        assertTrue(loginPage.registerContainer.getAttribute("style").contains("display: none;"));
     }
 }

@@ -14,6 +14,7 @@ public class LoginPage extends WebPage {
 
     public SelenideElement header = $("div[class*='card-header'] h4"),
                         loginForm = $(".card-body"),
+                        registerContainer = $("#registrationContainer"),
                         emailField = $("#loginInput"),
                         passwordField = $("#passwordInput"),
                         loginButton = $("div[class*='card-footer']").$$("button").filter(visible).last(),
@@ -22,7 +23,7 @@ public class LoginPage extends WebPage {
 
     public LoginPage(){
         this.url = "/index.html";
-        this.title = "Welcome to Propeller Automated Testing Championship";
+        this.title = "Welcom to Propeller Automated Testing Championship";
     }
 
 

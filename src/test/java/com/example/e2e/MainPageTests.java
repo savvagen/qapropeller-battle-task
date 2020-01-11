@@ -1,8 +1,11 @@
 package com.example.e2e;
 
 
+
+import com.codeborne.selenide.testng.GlobalTextReport;
 import com.example.BaseTest;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +16,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 
-
+@Listeners({GlobalTextReport.class})
 public class MainPageTests extends BaseTest {
 
     @BeforeMethod
@@ -112,4 +115,13 @@ public class MainPageTests extends BaseTest {
     }
 
 
+    @Test
+    public void shouldCheckArticleZooming() {
+        mainPage.readArticles.clickCategory(0).clickArticle(0);
+        mainPage.cardSlider.scrollIntoView(true).shouldBe(visible);
+        actions().dragAndDropBy(mainPage.cardSlider, 295, 0).build().perform();
+        mainPage.heroImage.shouldHave(attribute("style", "width: 399px; height: 399px;"));
+        actions().dragAndDropBy(mainPage.cardSlider, 350, 0).build().perform();
+        mainPage.heroImage.shouldHave(attribute("style", "width: 500px; height: 500px;"));
+    }
 }
