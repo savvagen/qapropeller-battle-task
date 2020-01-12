@@ -117,7 +117,7 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
-    public void shouldDownloadArticleData() throws IOException, InterruptedException {
+    public void shouldDownloadArticleData() throws IOException {
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
         File downloadedFile = mainPage.downloadArticle();
         String actualText = new String(Files.readAllBytes(Paths.get(downloadedFile.getAbsolutePath())));

@@ -62,7 +62,7 @@ public class MainPage extends WebPage {
         return this;
     }
 
-    public File downloadArticle() throws IOException, InterruptedException {
+    public File downloadArticle() throws IOException {
         List<Article> articles = given().when().get(baseUrl + "/articles.json")
                 .then()
                 .extract()
