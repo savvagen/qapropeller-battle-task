@@ -3,7 +3,6 @@ package com.example.e2e;
 import com.codeborne.selenide.testng.GlobalTextReport;
 import com.example.BaseTest;
 import com.example.models.User;
-import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
 import static com.codeborne.selenide.Selenide.*;

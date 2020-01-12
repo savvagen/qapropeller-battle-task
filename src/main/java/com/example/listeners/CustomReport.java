@@ -14,7 +14,7 @@ import java.util.Collections;
 
 public class CustomReport extends SimpleReport {
 
-    private static final Logger log= LoggerFactory.getLogger("appLogger");
+    private static final Logger log = LoggerFactory.getLogger("appLogger");
     private EventsCollector logEventListener;
 
 
