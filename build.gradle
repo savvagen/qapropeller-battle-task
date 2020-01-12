@@ -56,12 +56,6 @@ dependencies {
 
 }
 
-
-task wrapper(type: Wrapper){
-    gradleVersion = '5.4'
-}
-
-
 import io.qameta.allure.gradle.task.AllureReport
 task allureAggregatedReport(type: AllureReport) {
     allure.resultsDir

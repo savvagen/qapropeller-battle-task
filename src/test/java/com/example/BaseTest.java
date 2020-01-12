@@ -1,10 +1,7 @@
 package com.example;
 
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import com.example.driver_profiders.ChromeDriverProvider;
 import com.example.models.User;
 import com.example.pages.LoginPage.LoginPage;
 import com.example.pages.MainPage.MainPage;

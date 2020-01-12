@@ -1,12 +1,9 @@
 package com.example.pages.MainPage;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.pages.WebPage;
 import com.google.gson.Gson;
-import org.testng.reporters.jq.Main;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
