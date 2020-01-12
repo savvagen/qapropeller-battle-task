@@ -77,6 +77,14 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    public void shouldEnableSaveButtonAfterArticleReading(){
+        mainPage.shouldBeOpened();
+        mainPage.readArticles.clickCategory("Top level clients").clickArticle("Jon Snow");
+        mainPage.cardSaveButton.shouldBe(disabled);
+        mainPage.scrollDownArticle().cardSaveButton.shouldBe(enabled);
+    }
+
+    @Test
     public void shouldAddArticleToSaved(){
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
         mainPage.saveArticle();

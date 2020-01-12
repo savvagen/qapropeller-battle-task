@@ -1,9 +1,11 @@
 package com.example.pages.MainPage;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.pages.WebPage;
 import com.google.gson.Gson;
+import org.testng.reporters.jq.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,9 +72,18 @@ public class MainPage extends WebPage {
         var articles = new Gson().fromJson(response.body(), com.example.models.Articles.class);
         var articleDataFileTextLink = articles.articles.get(2).subArticles.get(9).articleDataFileTextLink;
         executeJavaScript(
-                String.format("$(\"button:contains('Download info')\")[0].setAttribute('href', \"%s/%s\");",
-                        Configuration.baseUrl, articleDataFileTextLink));
+                // String.format("$(\"button:contains('Download info')\")[0].setAttribute('href', \"%s/%s\");",
+                //        Configuration.baseUrl, articleDataFileTextLink)
+                String.format("arguments[0].setAttribute('href', \"%s/%s\");", Configuration.baseUrl, articleDataFileTextLink), downloadButton);
         return downloadButton.shouldBe(enabled).download();
     }
+
+    public MainPage scrollDownArticle(){
+        cardText.scrollIntoView(true);
+        executeJavaScript("$(arguments[0]).animate({scrollTop: document.body.scrollHeight},\"fast\");", cardText.getSearchCriteria());
+        return this;
+    }
+
+
 
 }
