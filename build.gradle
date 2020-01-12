@@ -20,7 +20,7 @@ allure {
     resultsDir = file("${rootDir.absolutePath}/build/allure-results")
     reportDir = file("${rootDir.absolutePath}/build/reports/allure-report")
     useTestNG {
-        version = '2.0-BETA10'
+        version = "$allureGradleVersion"
     }
     downloadLink = "https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/$allureGradleVersion/allure-${allureGradleVersion}.zip"
 }

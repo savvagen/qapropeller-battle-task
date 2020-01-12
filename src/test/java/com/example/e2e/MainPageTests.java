@@ -4,9 +4,12 @@ package com.example.e2e;
 
 import com.codeborne.selenide.testng.GlobalTextReport;
 import com.example.BaseTest;
+import com.example.listeners.AllureTextReport;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +19,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 
-@Listeners({GlobalTextReport.class})
+@Listeners({GlobalTextReport.class, AllureTextReport.class})
 public class MainPageTests extends BaseTest {
 
     @BeforeMethod
@@ -116,9 +119,9 @@ public class MainPageTests extends BaseTest {
     @Test
     public void shouldDownloadArticleData() throws IOException, InterruptedException {
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
-        var downloadedFile = mainPage.downloadArticle();
-        var actualText = new String(Files.readAllBytes(Paths.get(downloadedFile.getAbsolutePath())));
-        var expectedText = new String(Files.readAllBytes(Paths.get(descriptionFilePath)));
+        File downloadedFile = mainPage.downloadArticle();
+        String actualText = new String(Files.readAllBytes(Paths.get(downloadedFile.getAbsolutePath())));
+        String expectedText = new String(Files.readAllBytes(Paths.get(descriptionFilePath)));
         assertEquals(expectedText, actualText);
     }
 

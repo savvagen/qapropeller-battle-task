@@ -2,7 +2,9 @@ package com.example.e2e;
 
 import com.codeborne.selenide.testng.GlobalTextReport;
 import com.example.BaseTest;
+import com.example.listeners.AllureTextReport;
 import com.example.models.User;
+import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
 import org.testng.annotations.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -13,7 +15,7 @@ import static com.codeborne.selenide.Condition.*;
 @Epic("Smoke")
 @Feature("Login Page")
 @Link(name = "video", type = "selenoid")
-@Listeners({GlobalTextReport.class})
+@Listeners({GlobalTextReport.class, AllureTextReport.class})
 public class LoginTests extends BaseTest {
 
 
@@ -102,7 +104,7 @@ public class LoginTests extends BaseTest {
     @Flaky
     @Description("Make full login action")
     public void shouldLoginToMainPage(){
-        var page = loginPage.loginWith(admin).submit().confirm();
+        MainPage page = loginPage.loginWith(admin).submit().confirm();
         page.userButton.shouldBe(visible);
         page.header.shouldBe(visible).shouldHave(text("Articles to read"));
         assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
@@ -112,7 +114,7 @@ public class LoginTests extends BaseTest {
     @Story("Non Critical Tests")
     @Description("Check user navigated to empty page in case of invalid login")
     public void shouldNotLoginWithInvalidPassword(){
-        var invalidUser = new User("test", "invalid");
+        User invalidUser = new User("test", "invalid");
         loginPage.open().loginWith(invalidUser).submit().confirm();
         loginPage.loginForm.shouldNot(be(visible));
         assertEquals(getWebDriver().getTitle(), loginPage.title);
@@ -123,7 +125,7 @@ public class LoginTests extends BaseTest {
     @Story("Non Critical Tests")
     @Description("Check user navigated to empty page in case of invalid login")
     public void shouldNotLoginWithInvalidLogin() {
-        var invalidUser = new User("invalid", "test");
+        User invalidUser = new User("invalid", "test");
         loginPage.open().loginWith(invalidUser).submit().confirm();
         loginPage.loginForm.shouldNot(be(visible));
         assertEquals(getWebDriver().getTitle(), loginPage.title);

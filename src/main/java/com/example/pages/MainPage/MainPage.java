@@ -2,18 +2,17 @@ package com.example.pages.MainPage;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import com.example.models.Article;
 import com.example.pages.WebPage;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.List;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
+import static io.restassured.RestAssured.*;
 
 
 public class MainPage extends WebPage {
@@ -64,14 +63,15 @@ public class MainPage extends WebPage {
     }
 
     public File downloadArticle() throws IOException, InterruptedException {
-        var request = HttpRequest.newBuilder().GET().uri(URI.create(baseUrl + "/articles.json")).build();
-        var response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        var articles = new Gson().fromJson(response.body(), com.example.models.Articles.class);
-        var articleDataFileTextLink = articles.articles.get(2).subArticles.get(9).articleDataFileTextLink;
-        executeJavaScript(
-                // String.format("$(\"button:contains('Download info')\")[0].setAttribute('href', \"%s/%s\");",
-                //        Configuration.baseUrl, articleDataFileTextLink)
-                String.format("arguments[0].setAttribute('href', \"%s/%s\");", Configuration.baseUrl, articleDataFileTextLink), downloadButton);
+        List<Article> articles = given().when().get(baseUrl + "/articles.json")
+                .then()
+                .extract()
+                .body()
+                .jsonPath().getList("articles", Article.class);
+        String articleDataFileTextLink = articles.get(2).subArticles.get(9).articleDataFileTextLink;
+        executeJavaScript(String.format(
+                "arguments[0].setAttribute('href', \"%s/%s\");", Configuration.baseUrl, articleDataFileTextLink),
+                downloadButton);
         return downloadButton.shouldBe(enabled).download();
     }
 

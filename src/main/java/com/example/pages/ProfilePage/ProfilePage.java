@@ -73,7 +73,7 @@ public class ProfilePage extends WebPage {
         paymentSystemSelect.selectOptionContainingText(paymentSystem.name);
         int max = Integer.valueOf(paymentRangeSlider.getAttribute("max"));
         int min = Integer.valueOf(paymentRangeSlider.getAttribute("min"));
-        var style = paymentRangeSlider.getAttribute("style");
+        String style = paymentRangeSlider.getAttribute("style");
         int pixs = Integer.valueOf(style.substring(6, style.length() - 3).trim());
         int pixsStep = Math.round(pixs / (max - min));
         int day = paymentDay;
