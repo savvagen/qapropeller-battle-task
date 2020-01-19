@@ -24,7 +24,7 @@ public class ChromeDriverProvider implements WebDriverProvider {
         dc.setCapability("enableVideo", true);
         dc.setCapability("screenResolution", "1960x1280x24");
         dc.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
-        dc.setCapability("videoName", "selenoid_recording_chrome.mp4");
+        // dc.setCapability("videoName", "selenoid_recording_chrome.mp4");
         dc.setCapability("videoScreenSize", "1960x1280");
         dc.setPlatform(Platform.LINUX);
         dc.setJavascriptEnabled(true);

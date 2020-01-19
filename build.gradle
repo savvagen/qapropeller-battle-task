@@ -66,6 +66,7 @@ task allureAggregatedReport(type: AllureReport) {
 test {
     useTestNG(){
         suites 'src/test/resources/suites/suite.xml'
+        // suites 'src/test/resources/suites/parallel-suite.xml'
     }
 }.finalizedBy allureAggregatedReport
 

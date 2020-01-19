@@ -2,6 +2,7 @@ package com.example;
 
 
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.example.driver_profiders.ChromeDriverProvider;
 import com.example.models.User;
 import com.example.pages.LoginPage.LoginPage;
 import com.example.pages.MainPage.MainPage;
@@ -46,19 +47,18 @@ public class BaseTest {
         assert inetAddress != null;
         log.info("Running Tests on host: " + inetAddress);
 
-        baseUrl = "http://localhost:8080"; // String.format("http://%s:8080", inetAddress.getHostAddress());
-        // Configuration.remote = "";
-
+        browser = ChromeDriverProvider.class.getName();
+        //browser = "chrome";
         browserSize = "1280x1024"; // 12024x768
+        //remote = "http://localhost:4444/wd/hub";
+        baseUrl = String.format("http://%s:8080", inetAddress.getHostAddress()); // "http://localhost:8080";
         timeout = 11000;
         startMaximized = true;
-        // fileDownload = FileDownloadMode.HTTPGET;
-        //browser = ChromeDriverProvider.class.getName();
-        browser = "chrome";
+
         admin = new User("test", "test");
         secretCookie = new Cookie.Builder("secret", "IAmSuperSeleniumMaster")
-                //.domain(inetAddress.getHostAddress())
-                .domain("localhost")
+                .domain(inetAddress.getHostAddress())
+                // .domain("localhost") // put if baseUrl = "http://localhost:8080";
                 .path("/")
                 .build();
         loginPage = new LoginPage();
