@@ -2,10 +2,8 @@ package com.example.e2e;
 
 import com.codeborne.selenide.SelenideElement;
 import com.example.BaseTest;
-import org.fest.assertions.api.Assertions;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
