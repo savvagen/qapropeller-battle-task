@@ -47,8 +47,8 @@ public class BaseTest {
         assert inetAddress != null;
         log.info("Running Tests on host: " + inetAddress);
 
-        browser = ChromeDriverProvider.class.getName();
-        //browser = "chrome";
+        //browser = ChromeDriverProvider.class.getName();
+        browser = "chrome";
         browserSize = "1280x1024"; // 12024x768
         //remote = "http://localhost:4444/wd/hub";
         baseUrl = String.format("http://%s:8080", inetAddress.getHostAddress()); // "http://localhost:8080";

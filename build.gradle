@@ -54,7 +54,11 @@ dependencies {
     compile group: 'io.rest-assured', name: 'json-path', version: '4.1.2'
     compile group: 'io.rest-assured', name: 'json-schema-validator', version: '4.1.2'
     testCompile "org.jetbrains.kotlin:kotlin-script-runtime:1.3.10"
+    // Assertion libs
+    // testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
+    testCompile group: 'org.easytesting', name: 'fest-assert-core', version: '2.0M10'
 
+    
 }
 
 import io.qameta.allure.gradle.task.AllureReport

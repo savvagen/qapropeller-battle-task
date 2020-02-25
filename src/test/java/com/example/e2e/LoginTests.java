@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 import static com.codeborne.selenide.Condition.*;
+import static org.fest.assertions.api.Assertions.*;
 
 @Epic("Smoke")
 @Feature("Login Page")
@@ -117,8 +118,8 @@ public class LoginTests extends BaseTest {
         User invalidUser = new User("test", "invalid");
         loginPage.open().loginWith(invalidUser).submit().confirm();
         loginPage.loginForm.shouldNot(be(visible));
-        assertEquals(getWebDriver().getTitle(), loginPage.title);
-        assertTrue(loginPage.registerContainer.getAttribute("style").contains("display: none;"));
+        assertThat(getWebDriver().getTitle()).isEqualTo(loginPage.title);
+        assertThat(loginPage.registerContainer.getAttribute("style")).contains("display: none;");
     }
 
     @Test

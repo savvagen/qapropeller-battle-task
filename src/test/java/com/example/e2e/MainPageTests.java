@@ -19,6 +19,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 
+
 @Listeners({GlobalTextReport.class, AllureTextReport.class})
 public class MainPageTests extends BaseTest {
 
