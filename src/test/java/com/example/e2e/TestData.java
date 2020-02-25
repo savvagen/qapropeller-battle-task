@@ -1,9 +1,7 @@
 package com.example.e2e;
 
 import com.example.BaseTest;
-import com.example.models.PaymentSystems;
 import org.testng.annotations.DataProvider;
-
 import static com.example.models.PaymentSystems.*;
 
 public class TestData extends BaseTest {

@@ -28,7 +28,6 @@ public class ProfilePage extends WebPage {
                         successPaymentAlert = $(".modal-alerts #successPaymentInfoSaveInfo"),
                         paymentRangeSlider = $("#paymentRange");
 
-
     public ElementsCollection navigationBar = $$("#v-pills-tab a[class^='nav-link']");
 
 

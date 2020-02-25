@@ -66,9 +66,7 @@ public class MainPage extends WebPage {
     public File downloadArticle() throws IOException {
         List<Article> articles = given().when().get(baseUrl + "/articles.json")
                 .then()
-                .extract()
-                .body()
-                .jsonPath().getList("articles", Article.class);
+                .extract().body().jsonPath().getList("articles", Article.class);
         String articleDataFileTextLink = articles.get(2).subArticles.get(9).articleDataFileTextLink;
         executeJavaScript(String.format(
                 "arguments[0].setAttribute('href', \"%s/%s\");", Configuration.baseUrl, articleDataFileTextLink),
