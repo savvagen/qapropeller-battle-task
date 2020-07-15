@@ -1,8 +1,10 @@
 package com.example.e2e;
 
 import com.codeborne.selenide.testng.GlobalTextReport;
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.example.BaseTest;
 import com.example.listeners.AllureTextReport;
+import com.example.listeners.ScreenshotListener;
 import com.example.models.User;
 import com.example.pages.MainPage.MainPage;
 import io.qameta.allure.*;
@@ -16,17 +18,11 @@ import static org.fest.assertions.api.Assertions.*;
 @Epic("Smoke")
 @Feature("Login Page")
 @Link(name = "video", type = "selenoid")
-@Listeners({GlobalTextReport.class, AllureTextReport.class})
+@Listeners({GlobalTextReport.class,
+        AllureTextReport.class,
+        ScreenShooter.class, ScreenshotListener.class})
 public class LoginTests extends BaseTest {
 
-
-    @BeforeClass
-    public void setUpClass(){
-    }
-
-    @AfterClass
-    public static void terDownClass(){
-    }
 
     @BeforeMethod
     public void setUp(){
@@ -63,6 +59,7 @@ public class LoginTests extends BaseTest {
 
     @Test(enabled = true)
     @Story("Non Critical Tests")
+    @Description("Should open and verify Login Page")
     public void shouldOpenLoginPage() {
         loginPage.shouldBeOpened();
         loginPage.emailField.shouldBe(visible);
@@ -73,6 +70,7 @@ public class LoginTests extends BaseTest {
 
     @Test
     @Story("Non Critical Tests")
+    @Description("Should open and check Login Button")
     public void shouldCheckLoginButton(){
         loginPage.loginWith(admin);
         loginPage.loginButton.scrollIntoView("{block: \"center\"}").hover();
@@ -82,6 +80,7 @@ public class LoginTests extends BaseTest {
 
     @Test
     @Story("Non Critical Tests")
+    @Description("Should check Sign In button appears")
     public void shouldCheckSignInButtonAppears(){
         loginPage.loginWith(admin);
         loginPage.loginButton.hover();
@@ -91,6 +90,7 @@ public class LoginTests extends BaseTest {
 
     @Test
     @Story("Non Critical Tests")
+    @Description("Should check alerts on Login Page")
     public void shouldCheckLoginAlerts(){
         loginPage.loginWith(admin).submit();
         assertEquals(switchTo().alert().getText(), "Are you sure you want to login?");
@@ -110,6 +110,28 @@ public class LoginTests extends BaseTest {
         page.header.shouldBe(visible).shouldHave(text("Articles to read"));
         assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
     }
+
+    @Test
+    @Story("Business Critical Tests")
+    @Flaky
+    @Description("Failed test")
+    public void failedLoginTest(){
+        MainPage page = loginPage.loginWith(new User("test", "invalid")).submit().confirm();
+        page.userButton.shouldBe(visible);
+        page.header.shouldBe(visible).shouldHave(text("Articles to read"));
+        assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
+    }
+
+    @Test(enabled = false)
+    @Story("Business Critical Tests")
+    @Description("Skipped tests")
+    public void skippedLoginTest(){
+        MainPage page = loginPage.loginWith(new User("test", "invalid")).submit().confirm();
+        page.userButton.shouldBe(visible);
+        page.header.shouldBe(visible).shouldHave(text("Articles to read"));
+        assertTrue(getWebDriver().getCurrentUrl().contains(page.url));
+    }
+
 
     @Test
     @Story("Non Critical Tests")

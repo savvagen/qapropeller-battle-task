@@ -1,7 +1,10 @@
 package com.example;
 
 
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Screenshots;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.example.driver_profiders.ChromeDriverProvider;
 import com.example.models.User;
 import com.example.pages.LoginPage.LoginPage;
@@ -10,15 +13,16 @@ import com.example.pages.ProfilePage.ProfilePage;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.qameta.allure.selenide.LogType;
+import org.junit.After;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.*;
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import static com.codeborne.selenide.Configuration.*;
@@ -29,15 +33,16 @@ public class BaseTest {
 
     private static final Logger log = LoggerFactory.getLogger("appLogger");
     public final String descriptionFilePath = "src/test/resources/data/darth_vader.txt";
-    public User admin;
-    public Cookie secretCookie;
+    public static User admin;
+    public static Cookie secretCookie;
 
-    public LoginPage loginPage;
-    public MainPage mainPage;
-    public ProfilePage profilePage;
+    public static LoginPage loginPage;
+    public static MainPage mainPage;
+    public static ProfilePage profilePage;
 
 
-    public BaseTest(){
+    @BeforeClass
+    public static void setUpClass(){
         InetAddress inetAddress = null;
         try {
             inetAddress = InetAddress.getLocalHost();
@@ -48,12 +53,14 @@ public class BaseTest {
         log.info("Running Tests on host: " + inetAddress);
 
         //browser = ChromeDriverProvider.class.getName();
-        browser = "chrome";
-        browserSize = "1280x1024"; // 12024x768
-        //remote = "http://localhost:4444/wd/hub";
-        baseUrl = String.format("http://%s:8080", inetAddress.getHostAddress()); // "http://localhost:8080";
-        timeout = 11000;
-        startMaximized = true;
+        Configuration.browser = "chrome";
+        Configuration.browserSize = "1280x1024"; // 12024x768
+        //Configuration.remote = "http://localhost:4444/wd/hub";
+        Configuration.baseUrl = String.format("http://%s:8080", inetAddress.getHostAddress()); // "http://localhost:8080";
+        Configuration.timeout = 11000;
+        Configuration.startMaximized = true;
+        Configuration.reportsFolder = "test-result/reports";
+
 
         admin = new User("test", "test");
         secretCookie = new Cookie.Builder("secret", "IAmSuperSeleniumMaster")
@@ -64,23 +71,36 @@ public class BaseTest {
         loginPage = new LoginPage();
         mainPage = new MainPage();
         profilePage = new ProfilePage();
-    }
 
-
-    @BeforeSuite
-    public static void setUpSuite(){
-        SelenideLogger.addListener("allure", new AllureSelenide()
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide()
                 .savePageSource(true)
                 .screenshots(true)
                 .enableLogs(LogType.BROWSER, Level.ALL));
     }
 
-    @AfterSuite
-    public static void tearDownSuite() {
-        videoAttachment();
-        SelenideLogger.removeListener("allure");
+    @BeforeMethod
+    public void setUpMethod(){
+        ScreenShooter.captureSuccessfulTests = true;
     }
 
+    @AfterMethod
+    public void tearDown() throws IOException {
+        screenshot();
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        videoAttachment();
+        SelenideLogger.removeListener("AllureSelenide");
+    }
+
+
+    @Attachment(type = "image/png")
+    public byte[] screenshot() throws IOException {
+        Screenshots.takeScreenShotAsFile();
+        File screenshot = Screenshots.getLastScreenshot();
+        return screenshot == null ? null : Files.toByteArray(screenshot);
+    }
 
     @Attachment(value = "video", type = "video/mp4")
     public static byte[] videoAttachment() {
@@ -94,7 +114,8 @@ public class BaseTest {
             //        .pollDelay(1, TimeUnit.SECONDS)
             //        .ignoreExceptions()
             //        .until(() -> video != null);
-            return Files.readAllBytes(Paths.get(video.getAbsolutePath()));
+            //return Files.readAllBytes(Paths.get(video.getAbsolutePath()));
+            return Files.toByteArray(video);
         } catch (IOException e) {
             return new byte[0];
         }

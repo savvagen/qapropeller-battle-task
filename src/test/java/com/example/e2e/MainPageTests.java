@@ -3,8 +3,11 @@ package com.example.e2e;
 
 
 import com.codeborne.selenide.testng.GlobalTextReport;
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.example.BaseTest;
 import com.example.listeners.AllureTextReport;
+import com.example.listeners.ScreenshotListener;
+import io.qameta.allure.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -20,7 +23,11 @@ import static com.codeborne.selenide.WebDriverRunner.*;
 import static org.testng.Assert.*;
 
 
-@Listeners({GlobalTextReport.class, AllureTextReport.class})
+@Epic("Smoke")
+@Feature("Main Page")
+@Listeners({GlobalTextReport.class,
+        AllureTextReport.class,
+        ScreenShooter.class, ScreenshotListener.class})
 public class MainPageTests extends BaseTest {
 
     @BeforeMethod
@@ -38,6 +45,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Non Critical Tests")
+    @Description("Should open and verify Main Page")
     public void shouldCheckMainPage(){
         mainPage.open();
         mainPage.userButton.shouldBe(visible);
@@ -46,6 +55,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Non Critical Tests")
+    @Description("Should open and verify User Page")
     public void shouldOpenUserProfile(){
         mainPage.userButton.click();
         profilePage.header.shouldBe(visible).shouldHave(text("User profile settings"));
@@ -53,6 +64,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Business Critical Tests")
+    @Description("Should open article")
     public void shouldOpenFirstArticle(){
         mainPage.readArticles.clickCategory("Advertisers").clickArticle(0);
         mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
@@ -61,6 +74,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Business Critical Tests")
+    @Description("Should open article by name")
     public void shouldOpenFirstArticleByName(){
         mainPage.readArticles.clickCategory("Advertisers").clickArticle("Test Advertiser");
         mainPage.cardTitle.shouldBe(visible).shouldHave(text("Test Advertiser"));
@@ -70,6 +85,8 @@ public class MainPageTests extends BaseTest {
 
 
     @Test
+    @Story("Business Critical Tests")
+    @Description("Should open categories and articles")
     public void shouldOpenAllCategoriesAndArticles(){
         mainPage.readArticles.clickCategory(0).clickCategory(1).clickCategory(2);
         mainPage.readArticles.clickArticle("Darth Vader");
@@ -81,6 +98,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Non Critical Tests")
+    @Description("Should check Save button is enabled")
     public void shouldEnableSaveButtonAfterArticleReading(){
         mainPage.shouldBeOpened();
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Jon Snow");
@@ -89,6 +108,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Business Critical Tests")
+    @Description("Should save article")
     public void shouldAddArticleToSaved(){
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
         mainPage.saveArticle();
@@ -101,6 +122,9 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Flaky
+    @Story("Business Critical Tests")
+    @Description("Should remove article from saved")
     public void shouldRemoveArticleFromSavedList(){
         String articleName = "Darth Vader";
         mainPage.readArticles.clickCategory("Top level clients").clickArticle(articleName);
@@ -118,6 +142,8 @@ public class MainPageTests extends BaseTest {
     }
 
     @Test
+    @Story("Business Critical Tests")
+    @Description("Should download article attachment")
     public void shouldDownloadArticleData() throws IOException {
         mainPage.readArticles.clickCategory("Top level clients").clickArticle("Darth Vader");
         File downloadedFile = mainPage.downloadArticle();
@@ -128,6 +154,8 @@ public class MainPageTests extends BaseTest {
 
 
     @Test
+    @Story("Non Critical Tests")
+    @Description("Should zoom article icon")
     public void shouldCheckArticleZooming() {
         mainPage.readArticles.clickCategory(0).clickArticle(0);
         mainPage.cardSlider.scrollIntoView(true).shouldBe(visible);

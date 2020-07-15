@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.10'
+    //id 'org.jetbrains.kotlin.jvm' version '1.3.10'
     id "io.qameta.allure" version "2.8.1"
 }
 
@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation([
             "org.testng:testng:$testNgVersion",
@@ -68,21 +68,46 @@ task allureAggregatedReport(type: AllureReport) {
 }
 
 
+
+task copyHisory {
+    copy {
+        from "build/reports/allure-report/history"
+        into "build/allure-results/history"
+        include "*.*"
+    }
+}
+
 test {
     useTestNG(){
-        suites 'src/test/resources/suites/suite.xml'
-        // suites 'src/test/resources/suites/parallel-suite.xml'
+        //suites 'src/test/resources/suites/suite.xml'
+        suites 'src/test/resources/suites/parallel-suite.xml'
+    }
+    doLast {
+        copy {
+            from "src/main/resources"
+            into "build/allure-results"
+            include "categories.json"
+        }
     }
 }.finalizedBy allureAggregatedReport
 
 
+/*task copyCategories {
+    copy {
+        from "src/main/resources"
+        into "build/allure-results"
+        include "categories.json"
+    }
+}.finalizedBy allureAggregatedReport*/
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
+
+
+//compileKotlin {
+//    kotlinOptions.jvmTarget = "1.8"
+//}
+//compileTestKotlin {
+//    kotlinOptions.jvmTarget = "1.8"
+//}
 
 clean.doFirst {
     delete("${rootDir}/allure-results")
